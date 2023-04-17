@@ -11,5 +11,5 @@ namespace App\Services;
  */
 class CommonService
 {
-    use SchoolTrait;
+    use AdminTrait;
 }

@@ -1,22 +1,22 @@
 <?php
 
-namespace App\Models\Center;
+namespace App\Models\Api;
 
 
 /**
- * Class AdminRole
+ * Class RolePermission
  * @property integer $id
  * @property string $uuid uuid唯一标识
- * @property string $admin_uuid 账号uuid
+ * @property string $permission_uuid 菜单uuid
  * @property string $role_uuid 角色uuid
  * @author yee
  * @date 2023/4/12
  * @package App\Models
  * @method object isEmpty() 判断对象是否为空
  */
-class AdminRole extends BaseModel
+class RolePermission extends BaseModel
 {
     protected $fillable = [
-        'admin_uuid', 'role_uuid'
+        'permission_uuid', 'role_uuid'
     ];
 }

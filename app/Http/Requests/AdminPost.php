@@ -27,8 +27,9 @@ class AdminPost extends FormRequest
     public function rules(): array
     {
         return [
-            'name'          =>  ['bail','required','unique:App\Models\Center\Admin'],
-            'password'      =>  ['bail','required',new Password]
+            'name'          =>  ['bail','required','unique:App\Models\Api\Admin'],
+            'password'      =>  ['bail','required',new Password],
+            'role_uuid'     =>  ['bail','required'],
         ];
     }
 
@@ -42,7 +43,8 @@ class AdminPost extends FormRequest
         return [
             'name.required'         => '账号不能为空',
             'name.unique'           => '账号已存在',
-            'password.required'     => '密码不能为空'
+            'password.required'     => '密码不能为空',
+            'role_uuid.required'    => '请选择一个角色',
         ];
     }
 

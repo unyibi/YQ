@@ -2,11 +2,10 @@
 
 namespace App\Http\Middleware;
 
+use App\Lib\Jwt;
 use Closure;
-use Commons\Utilities\JwtHandle;
-use Commons\Utilities\StringHelper;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class Authorization
@@ -20,15 +19,20 @@ class Authorization
      */
     public function handle(Request $request, Closure $next)
     {
+        $noVerifyRoute = [
+            'api/login'
+        ];
+        $route = $request->route()->uri();
         $jwtToken = $request->header("token",'');
+        $request->merge(['requestId' => Uuid::uuid4()->toString()]);
+        if(in_array($route,$noVerifyRoute)){
+            return $next($request);
+        }
         if(empty($jwtToken)){
             throw new BadRequestHttpException('未登录');
         }
-        $tokenData = JwtHandle::decode($jwtToken);
-        $schoolId = data_get($tokenData, 'id');
-        $request->merge(['schoolId' => $schoolId]);
-        $request->merge(['requestId' => Str::uuid()->toString()]);
-        config(['database.connections.mysql.database' => StringHelper::getDatabase($schoolId)]);
+        $adminUuid = Jwt::verifyJwt($jwtToken);
+        $request->merge(['adminUuid' => $adminUuid]);
         return $next($request);
     }
 }

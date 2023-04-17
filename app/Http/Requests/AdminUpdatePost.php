@@ -27,7 +27,7 @@ class AdminUpdatePost extends FormRequest
     {
         $uuid = $this->route()->parameter('uuid');
         return [
-            'name'          =>  "bail|required|unique:App\Models\Center\Admin,uuid,{$uuid}",
+            'name'          =>  "bail|required|unique:App\Models\Api\Admin,uuid,{$uuid}",
         ];
     }
 

@@ -27,7 +27,7 @@ class RoleUpdatePost extends FormRequest
     {
         $uuid = $this->route()->parameter('uuid');
         return [
-            'role'          =>  "bail|required|unique:App\Models\Center\Role,uuid,{$uuid}",
+            'role'          =>  "bail|required|unique:App\Models\Api\Role,uuid,{$uuid}",
         ];
     }
 

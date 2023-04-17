@@ -26,7 +26,7 @@ class RolePost extends FormRequest
     public function rules(): array
     {
         return [
-            'role'          =>  ['bail','required','unique:App\Models\Center\Role'],
+            'role'          =>  ['bail','required','unique:App\Models\Api\Role'],
         ];
     }
 

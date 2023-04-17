@@ -6,14 +6,14 @@ namespace App\Services;
 
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-trait SchoolTrait
+trait AdminTrait
 {
-    public function getSchoolId()
+    public function getAdminUuid()
     {
-        $schoolId = request()->get("schoolId");
-        if(empty($schoolId)){
+        $adminUuid = request()->get("adminUuid");
+        if(empty($adminUuid)){
             throw new BadRequestHttpException('参数错误');
         }
-        return $schoolId;
+        return $adminUuid;
     }
 }

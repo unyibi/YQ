@@ -4,7 +4,7 @@
 namespace App\Services\Api;
 
 
-use App\Models\APi\Articles;
+use App\Models\APi\Article;
 use App\Services\CommonService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -27,8 +27,7 @@ class ArticleService extends CommonService
      */
     public function getArticle(array $condition, int $page, int $pageSize, array $columnUuid)
     {
-        $condition[] = ['school_id', '=', $this->getSchoolId()];
-        $sql = Articles::query();
+        $sql = Article::query();
         if(!empty($columnUuid)){
             $sql->whereJsonContains("column_uuid", $columnUuid);
         }
@@ -42,8 +41,7 @@ class ArticleService extends CommonService
      */
     public function getArticleCount(array $condition,array $columnUuid): int
     {
-        $condition[] = ['school_id', '=', $this->getSchoolId()];
-        $sql = Articles::query();
+        $sql = Article::query();
         if(!empty($columnUuid)){
             $sql->whereJsonContains("column_uuid", $columnUuid);
         }
@@ -57,7 +55,7 @@ class ArticleService extends CommonService
      */
     public function getArticleDetail(string $uuid)
     {
-        return Articles::query()->where(['uuid' => $uuid])->first();
+        return Article::query()->where(['uuid' => $uuid])->first();
     }
 
     /**
@@ -66,8 +64,7 @@ class ArticleService extends CommonService
      */
     public function addArticle($data)
     {
-        $data['school_id'] = $this->getSchoolId();
-        return Articles::query()->create($data);
+        return Article::query()->create($data);
     }
 
     /**
@@ -77,7 +74,7 @@ class ArticleService extends CommonService
      */
     public function editArticle(string $uuid, array $data): bool
     {
-        $article = Articles::query()->where(['uuid' => $uuid])->first();
+        $article = Article::query()->where(['uuid' => $uuid])->first();
         if(is_null($article)){
             return false;
         }
@@ -94,9 +91,9 @@ class ArticleService extends CommonService
     public function softDeleteArticle(array $uuid): bool
     {
         /**
-         * @var $article Articles
+         * @var $article Article
          */
-        $article = Articles::query()->where(['uuid' => $uuid])->get();
+        $article = Article::query()->where(['uuid' => $uuid])->get();
         if($article->isEmpty()){
             return false;
         }
@@ -115,9 +112,9 @@ class ArticleService extends CommonService
     public function sortArticle(string $uuid, int $sort): bool
     {
         /**
-         * @var $article Articles
+         * @var $article Article
          */
-        $article = Articles::query()->where(['uuid' => $uuid])->first();
+        $article = Article::query()->where(['uuid' => $uuid])->first();
         if(is_null($article)){
             return false;
         }
@@ -134,9 +131,9 @@ class ArticleService extends CommonService
     public function topArticle(string $uuid, int $isTop): bool
     {
         /**
-         * @var $article Articles
+         * @var $article Article
          */
-        $article = Articles::query()->where(['uuid' => $uuid])->first();
+        $article = Article::query()->where(['uuid' => $uuid])->first();
         if(is_null($article)){
             return false;
         }
