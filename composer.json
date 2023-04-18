@@ -11,6 +11,7 @@
         "firebase/php-jwt": "^6.4",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
+        "intervention/image": "^2.7",
         "laravel/framework": "^8.75",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
@@ -31,7 +32,10 @@
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/",
             "Commons\\": "common/"
-        }
+        },
+        "files": [
+            "common/Common/Common.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

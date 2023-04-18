@@ -4,26 +4,26 @@
 namespace App\Http\Controllers\Api;
 
 
-use App\Http\Requests\ArticlePost;
-use App\Services\Api\ArticleService;
+use App\Http\Requests\VideoPost;
+use App\Services\Api\VideoService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
- * Class ArticleController
+ * Class VideoController
  * @author yee
  * @date 2023/4/12
  * @package App\Http\Controllers\Api
  */
-class ArticleController extends BaseController
+class VideoController extends BaseController
 {
 
-    protected $articleService;
+    protected $videoService;
 
-    public function __construct(ArticleService $articleService)
+    public function __construct(VideoService $videoService)
     {
-        $this->articleService = $articleService;
+        $this->videoService = $videoService;
     }
 
     /**
@@ -44,10 +44,10 @@ class ArticleController extends BaseController
         if(!empty($columnUuid)){
             $columnUuid = array_map('intval', explode(',',$columnUuid));
         }
-        $articles = $this->articleService->getArticle($where, $page, $pageSize, $columnUuid);
-        $total = $this->articleService->getArticleCount($where, $columnUuid);
+        $res = $this->videoService->getVideo($where, $page, $pageSize, $columnUuid);
+        $total = $this->videoService->getVideoCount($where, $columnUuid);
         $data = [
-            'list' => $articles,
+            'list' => $res,
             'total' => $total,
         ];
         return $this->success($data);
@@ -61,91 +61,75 @@ class ArticleController extends BaseController
      */
     public function read(Request $request,string $uuid): JsonResponse
     {
-        $article = $this->articleService->getArticleDetail($uuid);
-        return $this->success($article);
+        $res = $this->videoService->getVideoDetail($uuid);
+        return $this->success($res);
     }
 
     /**
      * 新增
-     * @param ArticlePost $request
+     * @param VideoPost $request
      * @return JsonResponse
      */
-    public function save(ArticlePost $request): JsonResponse
+    public function save(VideoPost $request): JsonResponse
     {
         $columnUuid = $request->post('column_uuid',[]);
         $title = $request->post('title','');
-        $subTitle = $request->post('sub_title','');
         $imageUrl = $request->post('image_url','');
+        $videoUrl = $request->post('video_url','');
         $content = $request->post('content','');
         $isTop = $request->post('is_top',0);
         $sort = $request->post('sort',1);
-        $releaseTime = $request->post('release_time','');
-        $jumpType = $request->post('jump_type',0);
-        $jumpUrl = $request->post('jump_url','');
         $showApp = $request->post('show_app',[]);
         $isShow = $request->post('is_show',1);
-        $isDraft = $request->post('is_draft',0);
-        $timingSend = $request->post('timing_send','');
+        $releaseTime = $request->post('release_time','');
         $data = [
             'column_uuid' => $columnUuid,
             'title' => $title,
-            'sub_title' => $subTitle,
             'image_url' => $imageUrl,
+            'video_url' => $videoUrl,
             'content' => $content,
             'is_top' => $isTop,
             'sort' => $sort,
-            'release_time' => $releaseTime,
-            'jump_type' => $jumpType,
-            'jump_url' => $jumpUrl,
             'show_app' => $showApp,
             'is_show' => $isShow,
-            'is_draft' => $isDraft,
-            'timing_send' => $timingSend,
+            'release_time' => $releaseTime,
         ];
-        $res = $this->articleService->addArticle($data);
+        $res = $this->videoService->addVideo($data);
         return $this->success($res,'添加成功');
     }
 
 
     /**
      * 编辑
-     * @param ArticlePost $request
+     * @param VideoPost $request
      * @param $uuid
      * @return JsonResponse
      */
-    public function update(ArticlePost $request, $uuid): JsonResponse
+    public function update(VideoPost $request, $uuid): JsonResponse
     {
         $columnUuid = $request->post('column_uuid',[]);
         $title = $request->post('title','');
-        $subTitle = $request->post('sub_title','');
         $imageUrl = $request->post('image_url','');
+        $videoUrl = $request->post('video_url','');
         $content = $request->post('content','');
         $isTop = $request->post('is_top',0);
         $sort = $request->post('sort',1);
-        $releaseTime = $request->post('release_time','');
-        $jumpType = $request->post('jump_type',0);
-        $jumpUrl = $request->post('jump_url','');
         $showApp = $request->post('show_app',[]);
         $isShow = $request->post('is_show',1);
-        $isDraft = $request->post('is_draft',0);
-        $timingSend = $request->post('timing_send','');
+        $releaseTime = $request->post('release_time','');
         $data = [
             'column_uuid' => $columnUuid,
             'title' => $title,
-            'sub_title' => $subTitle,
             'image_url' => $imageUrl,
+            'video_url' => $videoUrl,
             'content' => $content,
             'is_top' => $isTop,
             'sort' => $sort,
-            'release_time' => $releaseTime,
-            'jump_type' => $jumpType,
-            'jump_url' => $jumpUrl,
             'show_app' => $showApp,
             'is_show' => $isShow,
-            'is_draft' => $isDraft,
-            'timing_send' => $timingSend,
+            'release_time' => $releaseTime,
         ];
-        $res = $this->articleService->editArticle($uuid, $data);
+        $res = $this->videoService->editVideo($uuid, $data);
         if(!$res){
             throw new BadRequestHttpException('参数错误');
         }
@@ -160,7 +144,7 @@ class ArticleController extends BaseController
     public function delete(Request $request): JsonResponse
     {
         $uuid = $request->post('uuid', []);
-        $res = $this->articleService->softDeleteArticle($uuid);
+        $res = $this->videoService->softDeleteVideo($uuid);
         if(!$res){
             throw new BadRequestHttpException('参数错误');
         }
@@ -176,7 +160,7 @@ class ArticleController extends BaseController
     public function sort(Request $request, $uuid): JsonResponse
     {
         $sort = $request->post('sort',1);
-        $res = $this->articleService->sortArticle($uuid, $sort);
+        $res = $this->videoService->sortVideo($uuid, $sort);
         if(!$res){
             throw new BadRequestHttpException('参数错误');
         }
@@ -192,7 +176,7 @@ class ArticleController extends BaseController
     public function top(Request $request, $uuid): JsonResponse
     {
         $isTop = $request->post('is_top',1);
-        $res = $this->articleService->topArticle($uuid, $isTop);
+        $res = $this->videoService->topVideo($uuid, $isTop);
         if(!$res){
             throw new BadRequestHttpException('参数错误');
         }

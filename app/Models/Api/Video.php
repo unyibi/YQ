@@ -5,37 +5,32 @@ namespace App\Models\Api;
 use Commons\Utilities\StringHelper;
 
 /**
- * Class Article
+ * Class Video
  * @property integer $id
  * @property string $uuid uuid唯一标识
  * @property array $column_uuid 所属栏目
  * @property string $title 标题
- * @property string $sub_title 副标题
  * @property string $image_url 图片地址
- * @property string $content 文章内容
+ * @property string $video_url 视频地址
+ * @property string $content 内容
  * @property integer $is_top 是否置顶
  * @property integer $is_del 是否删除
  * @property integer $sort 排序
- * @property string $release_time 发布时间
  * @property string $create_time 创建时间
  * @property string $update_time 更新时间
- * @property string $url_md5 爬虫加密链接
- * @property integer $jump_type 跳转外部链接类型：0不跳转1网页2文档
- * @property string $jump_url 跳转地址
+ * @property string $release_time 发布时间
  * @property integer $views_num 浏览量
  * @property array $show_app 平台：1官网 2微信 3抖音 4百度 5支付宝 6QQ
  * @property integer $is_show 是否展示：0否 1是
- * @property integer $is_draft 是否设为草稿：0否 1是
- * @property string $timing_send 定时发送
  * @author yee
  * @date 2023/4/12
  * @package App\Models
  * @method object isEmpty() 判断对象是否为空
  */
-class Article extends BaseModel
+class Video extends BaseModel
 {
     protected $fillable = [
-        'title', 'sub_title', 'image_url', 'content', 'is_top', 'sort', 'column_uuid', 'show_app', 'release_time', 'url_md5', 'jump_type', 'jump_url', 'views_num', 'is_show', 'is_draft', 'timing_send'
+        'title', 'image_url', 'video_url', 'content', 'is_top', 'sort', 'column_uuid', 'show_app', 'release_time', 'views_num', 'is_show'
     ];
 
     protected $casts = [
@@ -44,7 +39,7 @@ class Article extends BaseModel
     ];
 
     protected $hidden = [
-        'is_del','create_time'
+        'is_del', 'create_time'
     ];
 
     /**
@@ -68,12 +63,23 @@ class Article extends BaseModel
     }
 
     /**
-     * 跳转地址
-     * @param $value
+     * 视频地址
+     * @param string $value
+     * @return string
+     */
+    public function getVideoUrlAttribute(string $value): string
+    {
+        return StringHelper::formatImageToFull(($value));
+    }
+
+    /**
+     * 视频地址
+     * @param string $value
      * @return void
      */
-    public function setJumpUrlAttribute($value): string
+    public function setVideoUrlAttribute(string $value): void
     {
-        $this->attributes['jump_url'] = StringHelper::convertNullStringsToEmpty(($value));
+        $this->attributes['video_url'] = StringHelper::formatImageToPath(($value));
     }
+
 }

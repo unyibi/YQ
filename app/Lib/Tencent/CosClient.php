@@ -1,27 +1,27 @@
 <?php
 
 
-namespace App\Services\Tencent;
+namespace App\Lib\Tencent;
 
 
+use App\Services\CommonService;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use App\Services\CommonService;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class CosClient extends CommonService
 {
-    private $schoolId;
+    private $prefix;
 
     protected $savePathPattern = 'uploads/%s/%s';
 
     protected $driverName = 'cos';
 
-    public function setSchoolId($schoolId): CosClient
+    public function setPrefix($prefix): CosClient
     {
-        $this->schoolId = $schoolId;
+        $this->prefix = $prefix;
         return $this;
     }
 
@@ -39,7 +39,7 @@ class CosClient extends CommonService
     public function compressAndUpload(UploadedFile $uploadFile, $width, $height)
     {
         // 如果是gif动图，直接上传到cos
-        $savePath = sprintf($this->savePathPattern, $this->schoolId, date("Ymd"));
+        $savePath = sprintf($this->savePathPattern, $this->prefix, date("Ymd"));
         if ($this->didUploadDirectly($uploadFile)) {
             $fileUrl = $uploadFile->store($savePath, $this->driverName);
             return [$fileUrl, Storage::disk($this->driverName)->url($fileUrl)];
@@ -64,7 +64,7 @@ class CosClient extends CommonService
 
         $suffix = $this->getSuffix($imgUrl);
         $fileName = Str::random();
-        $savePath = sprintf($this->savePathPattern, $this->schoolId, date("Ymd"));
+        $savePath = sprintf($this->savePathPattern, $this->prefix, date("Ymd"));
         $filePath = sprintf("%s/%s.%s", $savePath, $fileName, $suffix);
         if ($suffix == 'gif' || $this->getFilesize($imgUrl) < 100) {
             Storage::disk($this->driverName)->put($filePath, file_get_contents($imgUrl));
@@ -93,7 +93,7 @@ class CosClient extends CommonService
         $this->compress($fullPath, $width, $height);
         Storage::delete($localPath);
         $compressFile = sprintf("/tmp/%s.jpg", $fileName);
-        $savePath = sprintf($this->savePathPattern, $this->schoolId, date("Ymd"));
+        $savePath = sprintf($this->savePathPattern, $this->prefix, date("Ymd"));
         if (file_exists($compressFile)) {
             $savePath = sprintf("%s/%s.jpg", $savePath, $fileName);
             Storage::disk($this->driverName)->put($savePath, file_get_contents($compressFile));

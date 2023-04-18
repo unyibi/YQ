@@ -38,7 +38,8 @@ class StringHelper
         if(isset($parseUrl['host'])){
             return $url;
         }
-        return Storage::disk($disk)->url($url);
+//        return Storage::disk($disk)->url($url);
+        return env('APP_URL') . $url;
     }
 
 
@@ -54,17 +55,6 @@ class StringHelper
         }
         $parseUrl = parse_url($url);
         return $parseUrl['path'] ?? $url;
-    }
-
-    /**
-     * 取模获取连接数据库
-     * @param $schoolId
-     * @return string
-     */
-    public static function getDatabase($schoolId): string
-    {
-        $hashModel = $schoolId % 8;
-        return sprintf("station_%s", $hashModel);
     }
 
     /**

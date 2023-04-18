@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-class ArticlePost extends FormRequest
+class ColumnPost extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,11 +26,8 @@ class ArticlePost extends FormRequest
     public function rules(): array
     {
         return [
-            'column_uuid'   =>  'required',
-            'title'         =>  'required|max:255',
+            'name'          =>  'required|max:255',
             'show_app'      =>  'required',
-            'content'       =>  'required',
-            'release_time'  =>  'required',
         ];
     }
 
@@ -42,13 +39,9 @@ class ArticlePost extends FormRequest
     public function messages(): array
     {
         return [
-            'column_uuid.required'  => '请选择栏目',
-            'title.required'        => '标题不能为空',
-            'title.max'             => '标题过长',
-            'show_app.required'     => '请至少选择一个平台',
-            'content.required'      => '内容不能为空',
-            'release_time.required' => '发布时间不能为空',
-
+            'name.required'        => '名称不能为空',
+            'name.max'             => '名称过长',
+            'show_app.required'    => '请至少选择一个平台',
         ];
     }
 

@@ -2,11 +2,11 @@
 
 namespace App\Providers;
 
+use App\Lib\Tencent\CosAdapter;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
 use League\Flysystem\Filesystem;
 use Qcloud\Cos\Client;
-use App\Services\Tencent\CosAdapter;
 
 /**
  * 腾讯云COS provider

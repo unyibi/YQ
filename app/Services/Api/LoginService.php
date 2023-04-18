@@ -4,7 +4,7 @@
 namespace App\Services\Api;
 
 
-use App\Lib\Jwt;
+use App\Lib\Jwt\Handle;
 use App\Models\Api\Admin;
 use App\Services\CommonService;
 use Illuminate\Support\Facades\Hash;
@@ -41,7 +41,7 @@ class LoginService extends CommonService
             throw new BadRequestHttpException('密码错误');
         }
         return[
-            'token' => JWT::createJwt($admin['uuid'])
+            'token' => Handle::createJwt($admin['uuid'])
         ];
     }
 

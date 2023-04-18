@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Services\Tencent;
+namespace App\Lib\Tencent;
 
 
 use Illuminate\Support\Arr;

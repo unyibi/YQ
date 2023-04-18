@@ -65,6 +65,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'jwt' => \App\Http\Middleware\Authorization::class,
-        'cross' => \App\Http\Middleware\EnableCrossRequestMiddleware::class,
+        'cross' => \App\Http\Middleware\EnableCrossRequest::class,
     ];
 }
